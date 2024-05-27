@@ -12,20 +12,26 @@ public class Model extends Observable{
         compTasks = new ArrayList<>();
     }
     
-    public void newTask(String task){
-        progTasks.add(new Task(task));
+    public void newTask(String name){
+        progTasks.add(new Task(name));
         setChanged();
         notifyObservers();
     }
     
-    public void removeTask(int index){
+    public void progRemoveTask(int index){
         progTasks.remove(index);
         setChanged();
         notifyObservers();
     }
     
-    public void completeTask(String task, int index){
-        compTasks.add(new Task(task));
+    public void compRemoveTask(int index){
+        compTasks.remove(index);
+        setChanged();
+        notifyObservers();
+    }
+    
+    public void completeTask(int index){
+        compTasks.add(new Task(progTasks.get(index).getName(), progTasks.get(index).getCreationDate()));
         progTasks.remove(index);
         setChanged();
         notifyObservers();
@@ -44,5 +50,11 @@ public class Model extends Observable{
     
     public ArrayList<Task> getCompTasks() {
         return compTasks;
+    }
+    
+    private void printList(){
+        for (Task t : progTasks){
+            System.out.println(t.getName());
+        }
     }
 }

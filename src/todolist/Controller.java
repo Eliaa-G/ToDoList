@@ -15,8 +15,8 @@ public class Controller {
         view.btnAddListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                String task = JOptionPane.showInputDialog(null, "Enter task name:", "New Task", 3);
-                model.newTask(task);
+                String name = JOptionPane.showInputDialog(null, "Enter task name:", "New Task", 3);
+                model.newTask(name);
             }
         });
         
@@ -24,11 +24,20 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    int check = view.getSelectedIndex();
-                    if(check != -1){
-                        int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete ALL tasks?", "Clear all?", 0, 2);
+                    int task = view.getSelectedIndex();
+                    if(task != -1){
+                        int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete this task?", "Delete?", 0, 2);
                         if(choice == 0){
-                            model.removeTask(view.getSelectedIndex());
+                            switch (view.getSelectedList()) {
+                                case 1:
+                                    model.progRemoveTask(task);
+                                    break;
+                                case 2:
+                                    model.compRemoveTask(task);
+                                    break;
+                                default:
+                                    throw new IndexOutOfBoundsException();
+                            }
                         }
                     }
                     else throw new IndexOutOfBoundsException();
@@ -42,7 +51,7 @@ public class Controller {
         view.btnClearListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!model.getProgTasks().isEmpty() && !model.getCompTasks().isEmpty()){
+                if (!model.getProgTasks().isEmpty() || !model.getCompTasks().isEmpty()){
                     int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete ALL tasks?", "Clear all?", 0, 2);
                     if(choice == 0){
                         model.clearTasks();
@@ -58,7 +67,14 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    model.completeTask(view.getSelectedValue(), view.getSelectedIndex());
+                    int task = view.getSelectedIndex();
+                    if(task != -1){
+                        int choice = JOptionPane.showConfirmDialog(null, "The task will be set as completed", "Complete", 0, 1);
+                        if(choice == 0){
+                            model.completeTask(task);
+                        }
+                    }
+                    else throw new IndexOutOfBoundsException();
                 }
                 catch(IndexOutOfBoundsException err){
                     JOptionPane.showMessageDialog(null, "Please select a task to complete", "Warning", 2);

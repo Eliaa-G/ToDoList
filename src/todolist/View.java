@@ -3,11 +3,20 @@ package todolist;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class View extends javax.swing.JFrame implements Observer{
     private final Model model;
     
+    private String[] PcolumnNames = {"Task", "Creation date"};
+    private String[] CcolumnNames = {"Task", "Creation date", "Completion date"};
+    private DefaultTableModel progTableModel;
+    private DefaultTableModel compTableModel;
+    
     public View(Model model) {
+        progTableModel = new DefaultTableModel(null, PcolumnNames);
+        compTableModel = new DefaultTableModel(null, CcolumnNames);
         initComponents();
         
         this.model = model;
@@ -30,25 +39,16 @@ public class View extends javax.swing.JFrame implements Observer{
         btnComplete.addActionListener(l);
     }
     
-    
     public int getSelectedIndex(){
-        if (!progList.isSelectionEmpty()){
-            return progList.getSelectedIndex();
-        }
-        else if (!compList.isSelectionEmpty()){
-            return compList.getSelectedIndex();
-        }
-        else return -1;
+        if (progTable.isShowing()) return progTable.getSelectedRow();
+        else if (compTable.isShowing()) return compTable.getSelectedRow();
+        else return -1;        
     }
     
-    public String getSelectedValue(){
-        if (!progList.isSelectionEmpty()){
-            return progList.getSelectedValue();
-        }
-        else if (!compList.isSelectionEmpty()){
-            return compList.getSelectedValue();
-        }
-        else return "-1";
+    public int getSelectedList(){
+        if (progTable.isShowing()) return 1;
+        else if (compTable.isShowing()) return 2;
+        else return -1;
     }
     
     @SuppressWarnings("unchecked")
@@ -61,16 +61,16 @@ public class View extends javax.swing.JFrame implements Observer{
         btnRemove = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         tbdPane = new javax.swing.JTabbedPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        progList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        compList = new javax.swing.JList<>();
+        progTable = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        compTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("To-Do List");
         setResizable(false);
 
-        lblToDo.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        lblToDo.setFont(new java.awt.Font("Eras Bold ITC", 1, 36)); // NOI18N
         lblToDo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblToDo.setText("TO-DO");
         lblToDo.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
@@ -88,14 +88,21 @@ public class View extends javax.swing.JFrame implements Observer{
         btnClear.setBackground(new java.awt.Color(255, 102, 102));
         btnClear.setText("CLEAR ALL");
 
-        progList.setToolTipText("");
-        jScrollPane1.setViewportView(progList);
+        progTable.setModel(progTableModel);
+        progTable.getTableHeader().setResizingAllowed(false);
+        progTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(progTable);
 
-        tbdPane.addTab("In progress", jScrollPane1);
+        tbdPane.addTab("In progress", jScrollPane2);
 
-        jScrollPane2.setViewportView(compList);
+        compTable.setModel(compTableModel);
+        compTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        compTable.setGridColor(new java.awt.Color(255, 255, 255));
+        compTable.getTableHeader().setResizingAllowed(false);
+        compTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(compTable);
 
-        tbdPane.addTab("Completed", jScrollPane2);
+        tbdPane.addTab("Completed", jScrollPane1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,7 +111,7 @@ public class View extends javax.swing.JFrame implements Observer{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tbdPane)
+                    .addComponent(tbdPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(lblToDo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnClear)
@@ -143,16 +150,27 @@ public class View extends javax.swing.JFrame implements Observer{
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnComplete;
     private javax.swing.JButton btnRemove;
-    private javax.swing.JList<String> compList;
+    private javax.swing.JTable compTable;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblToDo;
-    private javax.swing.JList<String> progList;
+    private javax.swing.JTable progTable;
     private javax.swing.JTabbedPane tbdPane;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void update(Observable o, Object arg) {
+        progTableModel.setRowCount(0);
+        compTableModel.setRowCount(0);
         
+        for (Task t : model.getProgTasks()){
+            Object[] data = {t.getName(), t.getCreationDate()};
+            progTableModel.addRow(data);
+        }
+        
+        for (Task t : model.getCompTasks()){
+            Object[] data = {t.getName(), t.getCreationDate(), t.getCompletionDate()};
+            compTableModel.addRow(data);
+        }
     }
 }
