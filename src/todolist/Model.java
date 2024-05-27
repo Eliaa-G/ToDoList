@@ -1,17 +1,20 @@
 package todolist;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Observable;
 
-public class Model extends Observable{
+public class Model extends Observable implements Serializable{
     private ArrayList<Task> progTasks;
     private ArrayList<Task> compTasks;
 
+    // CONSTRUCTOR
     public Model() {
         progTasks = new ArrayList<>();
         compTasks = new ArrayList<>();
     }
     
+    // METHODS
     public void newTask(String name){
         progTasks.add(new Task(name));
         setChanged();
@@ -44,17 +47,12 @@ public class Model extends Observable{
         notifyObservers();
     }
 
+    // GETTER
     public ArrayList<Task> getProgTasks() {
         return progTasks;
     }
     
     public ArrayList<Task> getCompTasks() {
         return compTasks;
-    }
-    
-    private void printList(){
-        for (Task t : progTasks){
-            System.out.println(t.getName());
-        }
     }
 }

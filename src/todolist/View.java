@@ -21,6 +21,21 @@ public class View extends javax.swing.JFrame implements Observer{
         
         this.model = model;
         model.addObserver(this);
+        
+/*
+        progTableModel.setRowCount(0);
+        compTableModel.setRowCount(0);
+        
+        for (Task t : model.getProgTasks()){
+            Object[] data = {t.getName(), t.getCreationDate()};
+            progTableModel.addRow(data);
+        }
+        
+        for (Task t : model.getCompTasks()){
+            Object[] data = {t.getName(), t.getCreationDate(), t.getCompletionDate()};
+            compTableModel.addRow(data);
+        }
+*/
     }
 
     public void btnAddListener(ActionListener l){

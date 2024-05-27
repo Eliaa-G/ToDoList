@@ -16,7 +16,10 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = JOptionPane.showInputDialog(null, "Enter task name:", "New Task", 3);
-                model.newTask(name);
+                if (name == null || name.equals(""));
+                else{
+                    model.newTask(name);
+                }
             }
         });
         
@@ -26,7 +29,7 @@ public class Controller {
                 try{
                     int task = view.getSelectedIndex();
                     if(task != -1){
-                        int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete this task?", "Delete?", 0, 2);
+                        int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete this task?", "Delete", 0, 2);
                         if(choice == 0){
                             switch (view.getSelectedList()) {
                                 case 1:
@@ -43,7 +46,7 @@ public class Controller {
                     else throw new IndexOutOfBoundsException();
                 }
                 catch(IndexOutOfBoundsException err){
-                    JOptionPane.showMessageDialog(null, "Please select a task to remove", "Warning", 2);
+                    JOptionPane.showMessageDialog(null, "Please select a task to remove.", "Warning", 2);
                 }
             }
         });
@@ -52,13 +55,13 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!model.getProgTasks().isEmpty() || !model.getCompTasks().isEmpty()){
-                    int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete ALL tasks?", "Clear all?", 0, 2);
+                    int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete ALL tasks?", "Clear all", 0, 2);
                     if(choice == 0){
                         model.clearTasks();
                     }
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "Lists are already empty", "Information", 1);
+                    JOptionPane.showMessageDialog(null, "Lists are already empty.", "Information", 1);
                 }
             }
         });
@@ -69,7 +72,7 @@ public class Controller {
                 try{
                     int task = view.getSelectedIndex();
                     if(task != -1){
-                        int choice = JOptionPane.showConfirmDialog(null, "The task will be set as completed", "Complete", 0, 1);
+                        int choice = JOptionPane.showConfirmDialog(null, "The task will be set as completed.", "Complete", 0, 1);
                         if(choice == 0){
                             model.completeTask(task);
                         }
@@ -77,7 +80,7 @@ public class Controller {
                     else throw new IndexOutOfBoundsException();
                 }
                 catch(IndexOutOfBoundsException err){
-                    JOptionPane.showMessageDialog(null, "Please select a task to complete", "Warning", 2);
+                    JOptionPane.showMessageDialog(null, "Please select a task to complete.", "Warning", 2);
                 }
             }
         });
