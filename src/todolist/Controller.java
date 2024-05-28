@@ -70,12 +70,16 @@ public class Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    int task = view.getSelectedIndex();
-                    if(task != -1){
-                        int choice = JOptionPane.showConfirmDialog(null, "The task will be set as completed.", "Complete", 0, 1);
-                        if(choice == 0){
-                            model.completeTask(task);
+                    int list = view.getSelectedList();
+                    if (list != 2){
+                        int task = view.getSelectedIndex();
+                        if(task != -1){
+                            int choice = JOptionPane.showConfirmDialog(null, "The task will be set as completed.", "Complete", 0, 1);
+                            if(choice == 0){
+                                model.completeTask(task);
+                            }
                         }
+                        else throw new IndexOutOfBoundsException();
                     }
                     else throw new IndexOutOfBoundsException();
                 }

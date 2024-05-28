@@ -26,7 +26,9 @@ public class Main {
                 view.setVisible(true);
             }
         });
-        
+    }
+    
+    public static void serialize(Model model){
         try{
             FileOutputStream fos = new FileOutputStream("todo.bin");
             ObjectOutputStream oos = new ObjectOutputStream(fos);

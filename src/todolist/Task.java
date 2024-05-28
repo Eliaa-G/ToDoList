@@ -1,9 +1,10 @@
 package todolist;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Task {
+public class Task implements Serializable {
     private String name;
     private String creationDate;
     private String completionDate;

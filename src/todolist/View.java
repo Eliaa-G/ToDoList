@@ -22,7 +22,6 @@ public class View extends javax.swing.JFrame implements Observer{
         this.model = model;
         model.addObserver(this);
         
-/*
         progTableModel.setRowCount(0);
         compTableModel.setRowCount(0);
         
@@ -35,7 +34,6 @@ public class View extends javax.swing.JFrame implements Observer{
             Object[] data = {t.getName(), t.getCreationDate(), t.getCompletionDate()};
             compTableModel.addRow(data);
         }
-*/
     }
 
     public void btnAddListener(ActionListener l){
@@ -84,6 +82,11 @@ public class View extends javax.swing.JFrame implements Observer{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("To-Do List");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         lblToDo.setFont(new java.awt.Font("Eras Bold ITC", 1, 36)); // NOI18N
         lblToDo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -112,7 +115,6 @@ public class View extends javax.swing.JFrame implements Observer{
 
         compTable.setModel(compTableModel);
         compTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        compTable.setGridColor(new java.awt.Color(255, 255, 255));
         compTable.getTableHeader().setResizingAllowed(false);
         compTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(compTable);
@@ -160,6 +162,11 @@ public class View extends javax.swing.JFrame implements Observer{
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Main.serialize(model);
+    }//GEN-LAST:event_formWindowClosing
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
