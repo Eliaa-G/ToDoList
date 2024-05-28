@@ -40,8 +40,21 @@ public class Model extends Observable implements Serializable{
         notifyObservers();
     }
     
-    public void clearTasks(){
+    public void unCompleteTask(int index){
+        progTasks.add(new Task(compTasks.get(index).getName(), compTasks.get(index).getCreationDate()));
+        compTasks.remove(index);
+        setChanged();
+        notifyObservers();
+    }
+    
+    public void clearAllTasks(){
         progTasks.clear();
+        compTasks.clear();
+        setChanged();
+        notifyObservers();
+    }
+    
+    public void clearCompTasks(){
         compTasks.clear();
         setChanged();
         notifyObservers();

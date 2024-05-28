@@ -8,7 +8,6 @@ public class Task implements Serializable {
     private String name;
     private String creationDate;
     private String completionDate;
-    private boolean completed;
     
     private Date date = new Date();
     private SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
@@ -16,14 +15,12 @@ public class Task implements Serializable {
     public Task(String name) {
         this.name = name;
         creationDate = df.format(date);
-        completed = false;
     }
     
     public Task(String name, String creationDate) {
         this.name = name;
         this.creationDate = creationDate;
         completionDate = df.format(date);
-        completed = true;
     }
     
     //GETTER & SETTER

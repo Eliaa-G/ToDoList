@@ -3,7 +3,6 @@ package todolist;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class View extends javax.swing.JFrame implements Observer{
@@ -15,8 +14,18 @@ public class View extends javax.swing.JFrame implements Observer{
     private DefaultTableModel compTableModel;
     
     public View(Model model) {
-        progTableModel = new DefaultTableModel(null, PcolumnNames);
-        compTableModel = new DefaultTableModel(null, CcolumnNames);
+        progTableModel = new DefaultTableModel(null, PcolumnNames){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                return false;
+            }
+        };
+        compTableModel = new DefaultTableModel(null, CcolumnNames){
+            @Override
+            public boolean isCellEditable(int r, int c){
+                return false;
+            }
+        };
         initComponents();
         
         this.model = model;
@@ -44,12 +53,20 @@ public class View extends javax.swing.JFrame implements Observer{
         btnRemove.addActionListener(l);
     }
     
-    public void btnClearListener(ActionListener l){
-        btnClear.addActionListener(l);
+    public void btnClearAllListener(ActionListener l){
+        btnClearAll.addActionListener(l);
+    }
+    
+    public void btnClearCompletedListener(ActionListener l){
+        btnClearComp.addActionListener(l);
     }
     
     public void btnCompleteListener(ActionListener l){
         btnComplete.addActionListener(l);
+    }
+    
+    public void btnUnCompleteListener(ActionListener l){
+        btnUncomplete.addActionListener(l);
     }
     
     public int getSelectedIndex(){
@@ -72,12 +89,14 @@ public class View extends javax.swing.JFrame implements Observer{
         btnComplete = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
-        btnClear = new javax.swing.JButton();
+        btnClearAll = new javax.swing.JButton();
         tbdPane = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         progTable = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         compTable = new javax.swing.JTable();
+        btnClearComp = new javax.swing.JButton();
+        btnUncomplete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("To-Do List");
@@ -103,8 +122,8 @@ public class View extends javax.swing.JFrame implements Observer{
         btnRemove.setText("-");
         btnRemove.setPreferredSize(new java.awt.Dimension(22, 22));
 
-        btnClear.setBackground(new java.awt.Color(255, 102, 102));
-        btnClear.setText("CLEAR ALL");
+        btnClearAll.setBackground(new java.awt.Color(255, 102, 102));
+        btnClearAll.setText("CLEAR ALL");
 
         progTable.setModel(progTableModel);
         progTable.getTableHeader().setResizingAllowed(false);
@@ -121,6 +140,11 @@ public class View extends javax.swing.JFrame implements Observer{
 
         tbdPane.addTab("Completed", jScrollPane1);
 
+        btnClearComp.setBackground(new java.awt.Color(255, 204, 51));
+        btnClearComp.setText("CLEAR COMPLETED");
+
+        btnUncomplete.setText("↩");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,11 +152,15 @@ public class View extends javax.swing.JFrame implements Observer{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tbdPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(tbdPane, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
                     .addComponent(lblToDo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnClear)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
+                        .addComponent(btnClearAll)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClearComp)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUncomplete, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnComplete, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -155,7 +183,9 @@ public class View extends javax.swing.JFrame implements Observer{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnComplete)
-                    .addComponent(btnClear))
+                    .addComponent(btnClearAll)
+                    .addComponent(btnClearComp)
+                    .addComponent(btnUncomplete))
                 .addContainerGap())
         );
 
@@ -169,9 +199,11 @@ public class View extends javax.swing.JFrame implements Observer{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnClearAll;
+    private javax.swing.JButton btnClearComp;
     private javax.swing.JButton btnComplete;
     private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnUncomplete;
     private javax.swing.JTable compTable;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -184,7 +216,7 @@ public class View extends javax.swing.JFrame implements Observer{
     public void update(Observable o, Object arg) {
         progTableModel.setRowCount(0);
         compTableModel.setRowCount(0);
-        
+
         for (Task t : model.getProgTasks()){
             Object[] data = {t.getName(), t.getCreationDate()};
             progTableModel.addRow(data);

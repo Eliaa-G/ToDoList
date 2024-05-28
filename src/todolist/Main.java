@@ -9,13 +9,14 @@ import java.io.ObjectOutputStream;
 public class Main {
     public static void main(String[] args) {
         Model model;
+        
+        // DE-SERIALIZATION
         try{
             FileInputStream fis = new FileInputStream("todo.bin");
             ObjectInputStream ois = new ObjectInputStream(fis);
             model = (Model) ois.readObject();
         }
         catch(Exception err){
-            err.printStackTrace();
             model = new Model();
         }
         View view = new View(model);
@@ -28,6 +29,7 @@ public class Main {
         });
     }
     
+    // CLASS METHOD FOR SERIALIZATION
     public static void serialize(Model model){
         try{
             FileOutputStream fos = new FileOutputStream("todo.bin");

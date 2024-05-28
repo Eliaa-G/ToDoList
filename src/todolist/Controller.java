@@ -51,17 +51,32 @@ public class Controller {
             }
         });
         
-        view.btnClearListener(new ActionListener(){
+        view.btnClearAllListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!model.getProgTasks().isEmpty() || !model.getCompTasks().isEmpty()){
                     int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete ALL tasks?", "Clear all", 0, 2);
                     if(choice == 0){
-                        model.clearTasks();
+                        model.clearAllTasks();
                     }
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Lists are already empty.", "Information", 1);
+                }
+            }
+        });
+        
+        view.btnClearCompletedListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!model.getCompTasks().isEmpty()){
+                    int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want do delete completed tasks?", "Clear completed", 0, 2);
+                    if(choice == 0){
+                        model.clearCompTasks();
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "There are no completed tasks.", "Information", 1);
                 }
             }
         });
@@ -85,6 +100,29 @@ public class Controller {
                 }
                 catch(IndexOutOfBoundsException err){
                     JOptionPane.showMessageDialog(null, "Please select a task to complete.", "Warning", 2);
+                }
+            }
+        });
+        
+        view.btnUnCompleteListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    int list = view.getSelectedList();
+                    if (list == 2){
+                        int task = view.getSelectedIndex();
+                        if(task != -1){
+                            int choice = JOptionPane.showConfirmDialog(null, "The task will be set as in-progress.", "Uncomplete", 0, 1);
+                            if(choice == 0){
+                                model.unCompleteTask(task);
+                            }
+                        }
+                        else throw new IndexOutOfBoundsException();
+                    }
+                    else throw new IndexOutOfBoundsException();
+                }
+                catch(IndexOutOfBoundsException err){
+                    JOptionPane.showMessageDialog(null, "Please select a task to uncomplete.", "Warning", 2);
                 }
             }
         });
