@@ -2,6 +2,8 @@ package todolist;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Observable;
 
 public class Model extends Observable implements Serializable{
@@ -17,18 +19,21 @@ public class Model extends Observable implements Serializable{
     // METHODS
     public void newTask(String name){
         progTasks.add(new Task(name));
+        sortTasksByName();
         setChanged();
         notifyObservers();
     }
     
     public void progRemoveTask(int index){
         progTasks.remove(index);
+        sortTasksByName();
         setChanged();
         notifyObservers();
     }
     
     public void compRemoveTask(int index){
         compTasks.remove(index);
+        sortTasksByName();
         setChanged();
         notifyObservers();
     }
@@ -36,6 +41,7 @@ public class Model extends Observable implements Serializable{
     public void completeTask(int index){
         compTasks.add(new Task(progTasks.get(index).getName(), progTasks.get(index).getCreationDate()));
         progTasks.remove(index);
+        sortTasksByName();
         setChanged();
         notifyObservers();
     }
@@ -43,6 +49,7 @@ public class Model extends Observable implements Serializable{
     public void unCompleteTask(int index){
         progTasks.add(new Task(compTasks.get(index).getName(), compTasks.get(index).getCreationDate()));
         compTasks.remove(index);
+        sortTasksByName();
         setChanged();
         notifyObservers();
     }
@@ -58,6 +65,22 @@ public class Model extends Observable implements Serializable{
         compTasks.clear();
         setChanged();
         notifyObservers();
+    }
+    
+    private void sortTasksByName(){
+        Collections.sort(progTasks, new Comparator<Task>(){
+            @Override
+            public int compare(Task o1, Task o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+        
+        Collections.sort(compTasks, new Comparator<Task>(){
+            @Override
+            public int compare(Task o1, Task o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
     }
 
     // GETTER
