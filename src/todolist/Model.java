@@ -19,21 +19,21 @@ public class Model extends Observable implements Serializable{
     // METHODS
     public void newTask(String name){
         progTasks.add(new Task(name));
-        sortTasksByName();
+        sortTasksByDate();
         setChanged();
         notifyObservers();
     }
     
     public void progRemoveTask(int index){
         progTasks.remove(index);
-        sortTasksByName();
+        sortTasksByDate();
         setChanged();
         notifyObservers();
     }
     
     public void compRemoveTask(int index){
         compTasks.remove(index);
-        sortTasksByName();
+        sortTasksByDate();
         setChanged();
         notifyObservers();
     }
@@ -41,7 +41,7 @@ public class Model extends Observable implements Serializable{
     public void completeTask(int index){
         compTasks.add(new Task(progTasks.get(index).getName(), progTasks.get(index).getCreationDate()));
         progTasks.remove(index);
-        sortTasksByName();
+        sortTasksByDate();
         setChanged();
         notifyObservers();
     }
@@ -49,7 +49,7 @@ public class Model extends Observable implements Serializable{
     public void unCompleteTask(int index){
         progTasks.add(new Task(compTasks.get(index).getName(), compTasks.get(index).getCreationDate()));
         compTasks.remove(index);
-        sortTasksByName();
+        sortTasksByDate();
         setChanged();
         notifyObservers();
     }
@@ -67,18 +67,18 @@ public class Model extends Observable implements Serializable{
         notifyObservers();
     }
     
-    private void sortTasksByName(){
+    private void sortTasksByDate(){
         Collections.sort(progTasks, new Comparator<Task>(){
             @Override
             public int compare(Task o1, Task o2) {
-                return o1.getName().compareToIgnoreCase(o2.getName());
+                return o2.getCreationDate().compareToIgnoreCase(o1.getCreationDate());
             }
         });
         
         Collections.sort(compTasks, new Comparator<Task>(){
             @Override
             public int compare(Task o1, Task o2) {
-                return o1.getName().compareToIgnoreCase(o2.getName());
+                return o2.getCompletionDate().compareToIgnoreCase(o1.getCompletionDate());
             }
         });
     }
