@@ -17,13 +17,13 @@ public class View extends javax.swing.JFrame implements Observer{
         progTableModel = new DefaultTableModel(null, PcolumnNames){
             @Override
             public boolean isCellEditable(int r, int c){
-                return false;
+                return c==0;
             }
         };
         compTableModel = new DefaultTableModel(null, CcolumnNames){
             @Override
             public boolean isCellEditable(int r, int c){
-                return false;
+                return c==0;
             }
         };
         initComponents();
