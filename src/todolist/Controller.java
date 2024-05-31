@@ -54,10 +54,19 @@ public class Controller {
         view.btnEditListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = JOptionPane.showInputDialog(null, "Enter task name:", "Edit task", 3);
-                if (name == null || name.equals(""));
-                else{
-                    model.editTaskName(view.getSelectedList(), view.getSelectedIndex(), name);
+                try{
+                    int task = view.getSelectedIndex();
+                    if(task != -1){
+                        String name = JOptionPane.showInputDialog(null, "Enter task name:", "Edit task", 3);
+                        if (name == null || name.equals(""));
+                        else{
+                            model.editTaskName(view.getSelectedList(), view.getSelectedIndex(), name);
+                        }
+                    }
+                    else throw new IndexOutOfBoundsException();
+                }
+                catch(IndexOutOfBoundsException err){
+                    JOptionPane.showMessageDialog(null, "Please select a task to edit.", "Warning", 2);
                 }
             }
         });
