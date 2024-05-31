@@ -81,7 +81,7 @@ public class Controller {
                     }
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "Lists are already empty.", "Information", 1);
+                    JOptionPane.showMessageDialog(null, "There are no tasks.", "Information", 1);
                 }
             }
         });
