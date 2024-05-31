@@ -66,6 +66,20 @@ public class Model extends Observable implements Serializable{
         setChanged();
         notifyObservers();
     }
+
+    public void editTaskName(int list, int index, String name){
+        switch(list){
+            case 1:
+                progTasks.get(index).setName(name);
+                break;
+            
+            case 2:
+                compTasks.get(index).setName(name);
+                break;
+        }
+        setChanged();
+        notifyObservers();
+    }
     
     private void sortTasksByDate(){
         Collections.sort(progTasks, new Comparator<Task>(){

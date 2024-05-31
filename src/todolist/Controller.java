@@ -15,7 +15,7 @@ public class Controller {
         view.btnAddListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = JOptionPane.showInputDialog(null, "Enter task name:", "New Task", 3);
+                String name = JOptionPane.showInputDialog(null, "Enter task name:", "New task", 3);
                 if (name == null || name.equals(""));
                 else{
                     model.newTask(name);
@@ -47,6 +47,17 @@ public class Controller {
                 }
                 catch(IndexOutOfBoundsException err){
                     JOptionPane.showMessageDialog(null, "Please select a task to remove.", "Warning", 2);
+                }
+            }
+        });
+        
+        view.btnEditListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = JOptionPane.showInputDialog(null, "Enter task name:", "Edit task", 3);
+                if (name == null || name.equals(""));
+                else{
+                    model.editTaskName(view.getSelectedList(), view.getSelectedIndex(), name);
                 }
             }
         });

@@ -39,4 +39,8 @@ public class Task implements Serializable {
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
